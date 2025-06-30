@@ -1,143 +1,211 @@
-// console.log("Hello, World!");
-// //node.js is a runtime environment that allows you to run JavaScript on the server side.
-// // chrome v8 engine is used by node.js to execute JavaScript code.
+// 30th June-2025 : Practice Assessment 1 - JavaScript Basics
+
+//Q1. Create a file with name basics and show all the features that you know about javascript? (minimum 5 and maximum 8 topics)
+// Try explaining in 1-2 lines : example - Prototype : An object which behaves as a link between two functions and provides inheritance
+
+// 1. Node.js 
+    // A run time environment that allows you to run JavaScrips on the server side. 
+    // this is powered by a v8 engine that is used to execute JavaScript
+// 2. Hoisting
+    // Hoisting is a mechanism in JavaScript where a variable and function decoration are moved to the top of their containing scope 
+    // During the compilation phase before the code is executed.
+// 3. Objects
+    // Objects are a collection of key value pairs, keys are Strings and the pair can be any data type . 
+    // objects are used to store & manage data in a structured way.
+// 4. Callback
+    // a callback is a function that is passed as an argument to another function and can be executed after the completion of the main function
+// 5. Scope 
+    // Scope refers to the accessibility of variables and functions with in a code.
+    // there are two types of scope, Global and Local
 
 
-// //1. Variable Declaration ~ Case Sensitivity
+//Q2. As javascript is not a type safe and has auto cast feature - try showing below values from the same variable
+// and its type as well :values are - "Robert ", .0266, false, {myname : "Test Me"}, 25166665, undefined, true, "Robert Jr.", null, {}, -32767
 
-// var name = "John Doe"; // String
-// var Nmae = "Jane Doe"; // String with different case
-// console.log("Name:", name);
-// console.log("Nmae:", Nmae);
+var name = "Robert "
+console.log(typeof name); // String
 
-// 2. var is the oldest way to declare variables in JavaScript.
+var dec = .0266
+console.log(typeof dec); // number
 
-// 3. Code is complied as well as partially interpreted in Node.js.
+var bool = false
+console.log(typeof bool); // Boolean
 
-// 5. semicolon is optional in JavaScript, but it's a good practice to use it to avoid errors.
+var obj = {myname : "Test Me"}
+console.log(typeof obj); // Object
 
-//6. All predefined loops like for, while, do-while, etc. are available in Node.js.
+var num =  25166665
+console.log(typeof num); // number
 
-//7. functions are used to build behavior that we need our node js code to perform
+var un =  undefined
+console.log(typeof un); // undefined
 
-//8. operators like +, -, *, /, % are used to perform arithmetic operations.
+var bool =  true
+console.log(typeof bool); //boolean
 
-// autocasting is the process of converting one data type to another automatically.
-// Example of a function in Node.js
-// This function takes two numbers and returns their sum.
-// Uncomment the following lines to see the function in action
+var str =  "Robert Jr."
+console.log(typeof str); //String
 
+var not =  null
+console.log(typeof not); // Object
 
+var obj  =  {}
+console.log(typeof obj ); // Object
 
-
-
-
-
-
-// function sum(a, b) {
-//     return a + b;
-// }
-
-// console.log("Sum of 5 and 3 is:", sum(5, 3));
-
-// ====================================== CLASS WORK ====================================
-
-// Implement all data types including symbol and bigInt
-console.log("========= Data Types in JavaScript =========");
-
-var num = 42; // Number
-
-console.log("Value of num is: " + num, "Data type is: " + typeof num);
+var num  =  -32767
+console.log(typeof num ); // Number
 
 
-var str = "Hello, World!"; // String
-console.log("Value of str is: " + str, "Data type is: " + typeof str);
+//Q3. Create a function with name showUserInfo, this function expects three params, firstname, lastname and age
+//  print all the details in the given function
 
-var float = 3.14159; // Float
-console.log("Value of float is: " + float, "Data type is: " + typeof float);
+var User = {
+    nameF: "Bob",
+    nameL: "Boberson",
+    age: 27,
+    
+    printUser: function() {
+        console.log(`First Name: ${this.nameF}, Last Name: ${this.nameL}, Age: ${this.age}`);
+    }
+};
 
-var bool = 1==1; // Boolean
-console.log("Value of bool is: " + bool, "Data type is: " + typeof bool);
-var bool = 1==3; // Boolean
-console.log("Value of bool is: " + bool, "Data type is: " + typeof bool);
-
-var undif = undefined; // Undefined
-console.log("Value of undif is: " + undif, "Data type is: " + typeof undif);
-
-var bigIntNum = BigInt(1234567890123456789012345678901234567890); // BigInt
-console.log("Value of bigIntNum is: " + bigIntNum, "Data type is: " + typeof bigIntNum);
-
-var Obj = { name: "John", age: 30 }; // Object
-console.log("Value of Obj is: " + JSON.stringify(Obj), "Data type is: " + typeof Obj);
-
-var symbol = Symbol("uniqueIdentifier"); // Symbol
-    console.log("Value of symbol is: " + symbol.toString(), "Data type is: " + typeof symbol);  
+User.printUser();
 
 
+//Q4. Create a function with name doaddition, pass three parameters and return the sum of all the three numbers
+// below output needs to be monitored - doaddition(2,3,4), doaddition(2), doaddition(2.3,3), doaddition("first", 2, "three")
+// analyse the outputs we get and try explaining the reasons behind!!
 
-// Types of Functions 
-
-console.log("======== Types of Functions in JavaScript =========");
-
-// 1. Function Declaration
-function greet(name) {
-    return "Hello, " + name + "!";
+function add(a, b, c) {
+    sum = a + b + c
+    return sum
 }
-console.log(greet("Alice")); 
-console.log(greet("Bob")); 
 
-function multiply(a, b) {
-    return a * b;
+console.log(add(2,3,4)) // 9 
+console.log(add(2)) // NaN Because b & c are undefined
+console.log(add(2.3, 3)) //NaN because c is undefined
+console.log(add("first", 2, "three")) //first2three Reason = added two strings to a number 
+
+//Q5. Give me an example of your choice for each of the below concepts
+// a. closure, 
+
+
+function outerFunction() {
+    let outerVar = "I'm from outer";
+
+    function innerFunction() {
+        console.log(outerVar); // inner "closes over" outerVar
+    }
+
+    return innerFunction;
 }
-console.log("Multiplication of 5 and 3 is:", multiply(5, 3));
 
-// 2. Anonymous Function
-var add = function(a, b) {
-    return a + b;
+const closure = outerFunction();
+closure();  // Output: I'm from outer
+
+
+// b. hoisting, 
+
+console.log(hoistedVar); // Output: undefined (not an error!)
+var hoistedVar = 14;
+
+hoistedFunction(); // Output: "I am hoisted!"
+
+function hoistedFunction() {
+    console.log("Hoisted!");
 }
-console.log("Addition of 5 and 3 is:", add(5, 3));
 
-// 3. Immediately Invoked Function Expression (IIFE)
+// c. constructor function
 
-(function(counter) {
-    console.log("This is an IIFE!" + counter);
-})(1001);
-
-//4. Constructor Function
-
-function Person(name, age) {
+function Student(name, age, gpa) {
     this.name = name;
     this.age = age;
-
-    this.getInfo = function() {
-        return `${this.name} + " is " + ${this.age} + " years old."`;
-    };
+    this.gpa = gpa;
+    this.greet = function () {
+        console.log(`${this.name}, your age is: ${age}, your gpa is: ${gpa}`);
+    }
 }
 
-var initialVal = 10
-// This is an example of a nested function where the inner function can access variables from the outer function's scope
-// This is called closure in JavaScript, where the inner function retains access to the outer function
-// Currying is a technique in functional programming where a function with multiple arguments is transformed into a sequence of functions, each taking a single argument.
-// This allows for partial application of functions, making it easier to create specialized functions from a general
-function A(a) {
-    console.log(initialVal)
-    //console.log(d) //can't be accessed in parent - scope accessibility becomes zero when we move up to the parent function
+const student1 = new Student("Ben", 22, 3.5);
+student1.greet();
+const student2 = new Student("Jill", 21, 3.7);
+student2.greet();
 
-    return function B(b) {
-        console.log(a + " Function B")
-        return function C(c) {
-            console.log(b + " Function C")
-            return function D(d) {
-                console.log(c + " Function D")
-                //
-                return a+b+c+d+initialVal //ultimate outcome of nested functions
-            }
-        }
-    }   
+//Q6. What is the purpose of call, apply and bind ? and why they are used ? whats the difference between bind and apply ?
+// Call = Passes arg manually or dynamically, reuse a function with different objects, invokes function immediately
+// Apply = Invokes function Immediately, passes array as argument
+// Bind = Does not invoke function immediately, returns new function with .this set 
+
+// Bind vs Apply 
+// Bind returns new function / Apply call function
+// bind Passes later or individually / Apply passes array
+
+//Q7. Create an example of bind using Student object, where a function returns data with SetTimeOut and we fix it by bind.
+
+var Student = {
+    FName: "Kalani",
+    Location: "Denver",
+    Age: "30",
+    Major: "Computer Science",
+
+    printInfo: function () {
+        console.log("Immediately:", this.FName, this.Major); // "Kalani"
+
+        // This will NOT work correctly due to lost context
+        setTimeout(function () {
+            console.log("Without bind:", this.FName, this.Major); // undefined or window.FName in browser
+        }, 2000);
+
+        // This WILL work correctly because we're binding `this` to the Student object
+        setTimeout(function () {
+            console.log("With bind:", this.FName, this.Major); // "Mitch"
+        }.bind(this), 4000);
+
+        // Change value to see effect
+        this.FName = "Mitch";
+        this.Major = "Fine Arts"
+    }
+};
+
+Student.printInfo();
+
+//Q8. Create an example of creating object with null prototype. What would be the purpose of the same?
+
+var Auto = {
+    type : null,
+
 }
 
-var objB = A(5); // Call the outer function with argument 5
-var objC = objB(10); // Call the next inner function with argument 10  
-var objD = objC(15); // Call the next inner function with argument 15
-var result = objD(20); // Call the innermost function with argument 20
-console.log(result);
+//Q9. How do we merge different objects properties using Object class function
+
+// Object.assign merges objects 
+
+//Ex..
+
+var emp = {name: "John"}
+var age = {age: 32}
+var dep = {department: "Human Recurses"}
+
+const emp1 = Object.assign({}, emp, age, dep);
+
+console.log(emp1)
+
+
+//Q10. Create an example of arithmatic operations using BigInt and show the output of the same
+
+var bigInt1 = 1232502876505234897562130746423595415n;
+var bigInt2 = 948326503487562348957234058974243563456n;
+
+const sum1 = bigInt1 + bigInt2;
+const dif = bigInt1 - bigInt2;
+const product = bigInt1 * bigInt2;
+const quotient = bigInt1 / bigInt2;
+const remainder = bigInt1 % bigInt2;
+
+console.log("Sum:", sum1);
+console.log("Difference:", dif);
+console.log("Product:", product);
+console.log("Quotient:", quotient);
+console.log("Remainder:", remainder);
+
+// Once done please share the link of git hub repoitory with the code and the answers to the questions above
