@@ -17,7 +17,7 @@ let getUserHistory = new Promise((resolve, reject)=>{
                 msg : "Fetched user history of navigations",
                 code : 200
             })
-        }, 4000)
+        }, 3000)
 
         setTimeout(() => {
             reject({
@@ -25,7 +25,7 @@ let getUserHistory = new Promise((resolve, reject)=>{
                 msg : "Failed to fetch user history of navigations",
                 code : 400
             })
-        }, 4000)
+        }, 2000)
 })
 
 //Promise2
@@ -36,7 +36,7 @@ let getProductList = new Promise((resolve, reject)=>{
             msg : "Fetched user history of products",
             code : 200
         })
-    }, 4000)
+    }, 3000)
 
     setTimeout(() => {
         reject({
@@ -44,7 +44,7 @@ let getProductList = new Promise((resolve, reject)=>{
             msg : "Failed to fetch user history of products",
             code : 400
         })
-    }, 4000)
+    }, 3000)
 })
 
 //Promise3
@@ -55,7 +55,7 @@ let getFutureSalesList = new Promise((resolve, reject)=>{
             msg : "Fetched user history of Future Sales",
             code : 200
         })
-    }, 4000)
+    }, 3000)
 
     setTimeout(() => {
         reject({
@@ -74,7 +74,6 @@ let getFutureSalesList = new Promise((resolve, reject)=>{
 // getFutureSalesList.then(()=>{ output })
 
 //1. All the promises needs to be completed either resolved or reject then only we should make it work
-
 Promise.allSettled([
     getUserHistory,
     getProductList,
@@ -96,5 +95,88 @@ Promise.all([
     console.log(error)
 })
 
-
 // create promise of four concurrent sessions of a day and try to resolve and reject them
+
+
+let getMernStack = new Promise((resolve, reject)=>{
+        setTimeout(() => {
+            resolve({
+                status : "Success",
+                msg : "Fetched Mern Stack",
+                code : 200
+            })
+        }, 5000)
+
+        setTimeout(() => {
+            reject({
+                status : "Failed",
+                msg : "Failed to fetch Mern Stack",
+                code : 400
+            })
+        }, 5000)
+})
+
+//Promise2
+let getDataAndAlgs = new Promise((resolve, reject)=>{
+    setTimeout(() => {
+        resolve({
+            status : "Success",
+            msg : "Fetched user Data & Algorithms",
+            code : 200
+        })
+    }, 5000)
+
+    setTimeout(() => {
+        reject({
+            status : "Failed",
+            msg : "Failed to fetch Data & Algorithms",
+            code : 400
+        })
+    }, 5000)
+})
+
+//Promise3
+let getSpring = new Promise((resolve, reject)=>{
+    setTimeout(() => {
+        resolve({
+            status : "Success",
+            msg : "Fetched user Spring Boot",
+            code : 200
+        })
+    }, 5000)
+
+    setTimeout(() => {
+        reject({
+            status : "Failed",
+            msg : "Failed to fetch Spring Boot",
+            code : 400
+        })
+    }, 5000)
+})
+
+
+Promise.allSettled([
+    getMernStack,
+    getDataAndAlgs,
+    getSpring
+]).then((data)=>{
+    console.log(data)
+})
+
+
+//2. if anyone of the above fails we should not do any next job or show next page
+
+Promise.all([
+    getMernStack,
+    getDataAndAlgs,
+    getSpring
+]).then((data)=>{
+    console.log(data)
+}).catch((error)=>{
+    console.log(error)
+})
+
+
+
+//1. All the promises needs to be completed either resolved or reject then only we should make it work
+

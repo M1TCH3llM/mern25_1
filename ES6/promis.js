@@ -71,42 +71,92 @@ function NavigateToApplication(user_id) {
 
 
 
-console.log("Promise Start")
+// console.log("Promise Start")
 
-let Authpromise = new Promise((resolve, reject)=>{
+// let Authpromise = new Promise((resolve, reject)=>{
 
-    //let user_id = authCallback(user, Authorization) //2 seconds
+//     //let user_id = authCallback(user, Authorization) //2 seconds
 
-    // if (user_id == "valid" || user_id == "active") {
-    setTimeout(() => {
-        resolve({
-            "status": "200",
-            "data" : "user_id",
-            "msg" : "auth success"
-        })
-    }, 2000);
+//     // if (user_id == "valid" || user_id == "active") {
+//     setTimeout(() => {
+//         resolve({
+//             "status": "200",
+//             "data" : "user_id",
+//             "msg" : "auth success"
+//         })
+//     }, 2000);
         
-    //} else {
-    setTimeout(() => {
-        reject({
-            "status": "404",
-            "data" : "null",
-            "msg" : "auth failed"
-        })
-    },1000)
-    //}
-})
+//     //} else {
+//     setTimeout(() => {
+//         reject({
+//             "status": "404",
+//             "data" : "null",
+//             "msg" : "auth failed"
+//         })
+//     },1000)
+//     //}
+// })
 
-console.log(Authpromise)
+// console.log(Authpromise)
 
-let authResult = Authpromise.then((data,err)=>{
-                       console.log("Inside promise success ", data)
-                }).catch((err)=>{
-                    console.log("Inside promise error ", err)
-                        //use - error
-                })
+// let authResult = Authpromise.then((data,err)=>{
+//                        console.log("Inside promise success ", data)
+//                 }).catch((err)=>{
+//                     console.log("Inside promise error ", err)
+//                         //use - error
+//                 })
 
-console.log("Promise complete", Authpromise)
+// console.log("Promise complete", Authpromise)
 
 
-//Create a student call with timeout and use promise to demonstrate resolve and reject behaviour
+//Create a student call with timeout and use promise to demonstrate resolve and reject behavior
+
+function fetchStudent(student_Id) {
+    return new Promise((resolve, reject) => {
+        console.log(`Fetching Student with ID: ${student_Id}`);
+
+        setTimeout(() => { 
+            if (student_Id === 2189) {
+              
+                resolve({
+                    status: 200,
+                    data: {
+                        id: 2189,
+                        name: "Jeff",
+                        grade: "B+",
+                        course: "Under Water Basket Weaving"
+
+                    },
+                    msg: "Student Found"
+                });
+            } else {    
+                reject({
+                    status: 400,
+                    data: null,
+                    msg: "Student not found"
+                });
+            }
+        }, 2000);
+        
+    });
+}
+
+// studentId -> should RESOLVE
+fetchStudent(2189)
+  .then(studentData => {
+    console.log("RESOLVED:", studentData);
+  })
+  .catch(error => {
+    console.log("REJECTED:", error);
+  });
+
+// studentId -> should REJECT
+fetchStudent(999)
+  .then(studentData => {
+    console.log("RESOLVED:", studentData);
+  })
+  .catch(error => {
+    console.log("REJECTED:", error);
+  });
+
+console.log("Student Promise Complete");
