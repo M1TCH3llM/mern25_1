@@ -19,3 +19,5 @@ app.get('/api/details', (req, res) => {
 app.listen(PORT, () => {
   console.log(`API running at http://localhost:${PORT}/api/details`);
 });
+
+// practice middle ware

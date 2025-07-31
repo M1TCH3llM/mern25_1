@@ -1,0 +1,1 @@
+alert("User information loaded with static middleware!");
