@@ -118,12 +118,44 @@ const villain = {
 villain.greet();
 
 //7. Create an example showing usage of event loop in concurrent execution cycle
-console.log("=========== Question 6 ===========");
 
+setTimeout(() => { // I Wrapped this to ensure the solution printed out uninterrupted by the following questions
 
+console.log("=========== Question 7 ===========");
+
+console.log('Synchronous Start');
+
+setTimeout(() => {
+  console.log('setTimeout Callback'); 
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log('Promise.then Callback'); 
+});
+
+console.log('Synchronous End');
+}, 3000);
 //8. create an example showing usage of short hand and default param.
+console.log("=========== Question 8 ===========");
+
+function createHero(name = "Super Man", power = "Laser Vision", town = "New York") {
+    return {
+        name,
+        power,
+        town
+    }
+}
+
+const hero1 = createHero();
+console.log(hero1);
+
+const hero2 = createHero("The Flash", "Super Speed", "Detroit")
+console.log(hero2);
+
+
 
 //9. Create two objects with some properties and merge them using Object method and ES6 way
+
 
 //10. Give me an example of map and set collection each with at least four properties implemented - like get, set, clear, etc
 
