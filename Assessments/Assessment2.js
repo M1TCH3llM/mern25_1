@@ -19,6 +19,8 @@ const heroes = [
 ]
 
 // a. Get heroes who are not evils
+console.log("=========== Question 1 / a ===========");
+
 let goodHeroes = heroes.filter(hero => hero.isEvil === false);
 console.log("Good Heroes: " + goodHeroes.map(hero => hero.name));
 
@@ -135,6 +137,9 @@ Promise.resolve().then(() => {
 
 console.log('Synchronous End');
 }, 3000);
+
+
+
 //8. create an example showing usage of short hand and default param.
 console.log("=========== Question 8 ===========");
 
@@ -155,11 +160,46 @@ console.log(hero2);
 
 
 //9. Create two objects with some properties and merge them using Object method and ES6 way
+console.log("=========== Question 9 ===========");
+
+const obj = {car: "Honda", mpg: 27, condition: "new"}
+const obj2 = {engine: "2.4L", driveTrain: "FWD", hasSunRoof: "Yes"}
+
+const merged = Object.assign({}, obj, obj2);
+console.log(merged);
+
+const merged1 = { ...obj, ...obj2 };
+console.log(merged1);
 
 
 //10. Give me an example of map and set collection each with at least four properties implemented - like get, set, clear, etc
+// Map example
+console.log("=========== Question 10 ===========");
 
-//11. Create a promise object that get resloved after two seconds and rejected after three. Also it returns five ES6 features on resolved
+const myMap = new Map();
+myMap.set('name', 'Spider Man');
+myMap.set('age', 16);
+myMap.set('Power', 'Spider Powers');
+console.log(myMap.get('name')); 
+console.log(myMap.has('age')); 
+myMap.delete('power');
+console.log(myMap.size); 
+myMap.clear();
+console.log(myMap.size);
+
+// Set example
+const mySet = new Set();
+mySet.add('Bat Man');
+mySet.add('Cat Woman');
+mySet.add('Joker');
+console.log(mySet.has('Bat Man'));
+mySet.delete('Joker');
+console.log(mySet.size);
+mySet.clear();
+console.log(mySet.size);
+
+//11. Create a promise object that get resolved after two seconds and rejected after three. Also it returns five ES6 features on resolved
+
 
 //12. Use the spread and rest operator to create a function which can multiple numbers from 1...n (n is the number of choice)
 
