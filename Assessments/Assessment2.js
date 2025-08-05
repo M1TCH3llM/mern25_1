@@ -200,11 +200,104 @@ console.log(mySet.size);
 
 //11. Create a promise object that get resolved after two seconds and rejected after three. Also it returns five ES6 features on resolved
 
+    
+
+console.log("=========== Question 11 ===========");
+
+const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve([
+            'Arrow Functions',
+            'Template Literals',
+            'Destructuring',
+            'Let & Const',
+            'Default Parameters'
+        ]);
+    }, 2000);
+
+    setTimeout(() => {
+        reject('Promise rejected after 3 seconds');
+    }, 3000);
+});
+
+promise
+    .then(features => {
+        console.log("Resolved with ES6 features:", features);
+    })
+    .catch(err => {
+        console.log("Error:", err);
+    });
+
+
 
 //12. Use the spread and rest operator to create a function which can multiple numbers from 1...n (n is the number of choice)
+console.log("=========== Question 12 ===========");
+
+function multiplyAll(...numbers) {
+    return numbers.reduce((acc, num) => acc * num, 1);
+}
+
+const nums = [1, 2, 3, 4, 5];
+console.log(multiplyAll(...nums));
 
 //13. Use the question #11 to build promises using async and await - with multithread
+console.log("=========== Question 13 ===========");
+
+async function handlePromise() {
+    try {
+        const features = await promise;
+        console.log("Async/Await Result:", features);
+    } catch (err) {
+        console.log("Caught Error:", err);
+    }
+}
+
+handlePromise();
 
 //14. Create an example of generator function of your choice
+console.log("=========== Question 14 ===========");
+
+function* numberGenerator(limit) {
+    let count = 1;
+    while (count <= limit) {
+        yield count++;
+    }
+}
+
+const gen = numberGenerator(5);
+for (let num of gen) {
+    console.log(num);
+}
 
 //15. Explain your knowledge on function and object protoype what is the purpose of the same - example
+
+// Every function in JS has a prototype object used when the function is used as a constructor.
+console.log("=========== Question 14 ===========");
+
+function SuperHero(name) {
+    this.name = name;
+}
+
+SuperHero.prototype.greet = function() {
+    return `Hello, I'm ${this.name}`;
+};
+
+const batman = new SuperHero("Batman");
+console.log(batman.greet());
+
+
+// All objects inherit from Object.prototype. You can add custom methods via prototype chaining.
+
+const animal = {
+    speak() {
+        return "I make a sound.";
+    }
+};
+
+const dog = Object.create(animal);
+dog.bark = function() {
+    return "Woof!";
+};
+
+console.log(dog.speak());
+console.log(dog.bark());
