@@ -3,7 +3,6 @@ import React from "react";
 export default class Application extends React.Component {
     constructor(parameters) {
         super(parameters);
-        // Initialize state or bind methods if needed
         this.state = {};    
     }
 

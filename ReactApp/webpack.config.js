@@ -9,7 +9,7 @@ config = {
      // webpack 5 comes with devServer which loads in development mode
     devServer: {
         port: 9090, //localhost:9090
-        historyApiFallback : true //localhost:9090/user - works as a server to respond with index.html for any reuest
+        historyApiFallback : true //localhost:9090/user - works as a server to respond with index.html for any request
     },
     module: {
         rules: [
