@@ -1,5 +1,5 @@
 //functional component - a functional component is react is a simple function that returns JSX
-import React from "react"; //import React library to use JSX
+import React, { Fragment } from "react"; //import React library to use JSX
 
 let NameComp = (props) => {
     //props is an object that contains the properties passed to the component
@@ -7,11 +7,11 @@ let NameComp = (props) => {
     
     
     return (
-        <div>
+        <Fragment>
             <h1>Hello, {props.name}!</h1>
             <p>This is a functional Name component.</p>
             <h3>Timer {props.timer}</h3>
-        </div>
+        </Fragment>
     );
 }
 
