@@ -119,3 +119,9 @@ export default class HomeComponent extends Component {
         );
     }
 }
+
+// Create a contorolled and uncontrolled components - an example
+// Sharing data between parent and child components (child, properties, object, classes) - an example
+// Sending data from child to parent component (using callback) - an example
+// Creating navigation using button click and then sending data to the navigated component - an example
+// Difference of state changes using setState and forceUpdate - an example

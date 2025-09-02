@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Mitchell",
+    "session": "MERN25A",
+    "address": "123 Main St, Denver",
+    "age": 30,
+    "createdAt": "2025-08-29T16:03:33.808Z"
+  },
+  {
+    "name": "Jeff",
+    "session": "MERN25A",
+    "address": "123 Main St, Denver",
+    "age": 30,
+    "createdAt": "2025-08-29T16:04:06.054Z"
+  }
+]
