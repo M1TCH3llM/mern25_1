@@ -19,10 +19,7 @@ export default function ConservativeDemo() {
       <p>Value: {n}</p>
       <button onClick={() => setN(n + 1)}>+1</button>
       <div className="muted">Renders so far: {renders.current}</div>
-      <div className="muted">
-        Tip: Only the text inside &lt;p&gt; changes; the button and headings are not
-        re-created.
-      </div>
+    
     </section>
   );
 }

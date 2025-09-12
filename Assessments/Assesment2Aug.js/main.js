@@ -4,7 +4,7 @@
 //1. Explain your knowledge of - statelessness, http, REST, spa and classical applications
 
     // Statelessness:
-        // Server that does not remeber per-client state between requests 
+        // Server that does not remember per-client state between requests 
         // each request must contain all needed info            
 
     // HTTP:

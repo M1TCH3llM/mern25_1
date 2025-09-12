@@ -12,5 +12,19 @@
     "address": "123 Main St, Denver",
     "age": 30,
     "createdAt": "2025-08-29T16:04:06.054Z"
+  },
+  {
+    "name": "Mitchell",
+    "session": "MERN25A",
+    "address": "123 Main St, Chicago",
+    "age": 33,
+    "createdAt": "2025-09-02T15:31:42.211Z"
+  },
+  {
+    "name": "Bob",
+    "session": "MERN25A",
+    "address": "345 Main St, Chicago",
+    "age": 27,
+    "createdAt": "2025-09-02T15:34:13.894Z"
   }
 ]
