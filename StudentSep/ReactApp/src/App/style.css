@@ -1,0 +1,19 @@
+h1, div, button { color: red; }
+
+.classSelector {
+    border: 5px solid blue;
+    border-radius: 80%;
+    color: black;
+}
+
+#myCss {
+    border: 5px solid green;
+    /* text-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5); */
+    color: rgb(45, 53, 90);
+}
+
+.class2Selector {
+    border: 5px solid blue;
+    border-radius: 80%;
+    color: rgb(235, 156, 92)!important;
+}
