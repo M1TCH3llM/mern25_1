@@ -15,6 +15,9 @@ const defaultApp = express(); // create a new express application instance
 const studentRouter = require('./routes/studentRoutes'); // import the student routes
 const studentApp = express(); // create a new express application instance for student routes
 
+const productRouter = require('./routes/productRoutes');
+const productApp = express();
+
 const userRouter = require('./routes/userRoutes'); // import the user routes
 const userApp = express(); // create a new express application instance for user routes
 
@@ -55,6 +58,10 @@ studentApp.use('/', studentRouter); // routes live at: GET /student/, POST /stud
 // application mounting for user routes
 app.use('/user', userApp); // base path: /user (e.g., /user/api/signinup per your comment)
 userApp.use('/', userRouter);
+
+//Product
+app.use("/product", productApp);
+productApp.use('/', productRouter);
 
 // application mounting for default routes
 app.use('/', defaultApp);

@@ -1,6 +1,4 @@
-// src/State/Student/StudentAction.js
 
-// thunk-style async action, mirrors your SaveUserToDBUsingFetch pattern
 
 export const FetchStudentsFromDBUsingFetch = () => {
   return async (dispatch) => {

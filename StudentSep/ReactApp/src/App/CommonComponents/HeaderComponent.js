@@ -25,7 +25,9 @@ let Header = (props)=>{
                 <NavLink to="/home"  className="button" activeclassname="true"> Home </NavLink>
                 <NavLink to="/login"  className="button" activeclassname="true"> User </NavLink>               
                 <NavLink to="/about"  className="button" activeclassname="true"> About </NavLink>
-                <NavLink to="/student"  className="button" activeclassname="true"> Student </NavLink>     
+                <NavLink to="/student"  className="button" activeclassname="true"> Student </NavLink> 
+                <NavLink to="/product"  className="button" activeclassname="true"> Product </NavLink> 
+
             </div>
 
             <button onClick={navigateWithName} >About With Name</button>

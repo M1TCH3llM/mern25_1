@@ -9,6 +9,7 @@ import About from "./CommonComponents/AboutComponent.jsx"; //complete path with 
 import NotFoundComponent from "./CommonComponents/NotFoundComponent";
 import UserComponent from "./AppComponents/User/UserComponent";
 import StudentComponent from "./AppComponents/Student/StudentComponent.js";
+import ProductComponent from "./AppComponents/Product/ProductComponent.js";
 
 export default class Application extends Component {
     constructor(parameters){
@@ -34,6 +35,7 @@ export default class Application extends Component {
                             <Route path="/about" element={<About />} />
                             <Route path="/about/:id/:name" element={<About />} /> 
                             <Route path="*" element={<NotFoundComponent />} />
+                            <Route path="/product" element={<ProductComponent />} />
                             {/* <HomeComponent />  
                             <About /> */}
                         </Routes>              
@@ -44,7 +46,11 @@ export default class Application extends Component {
     }
 }
 
-// Create a component with Your name - CommonComponents
-// In that component created three div section to display information about you -(not real) with different background colors and boder extension should be .jsx
-// Create a navigation link in header to navigate to your component
-// Create a route in app.js to render your component
+
+// 17-Sept-2025 - Cart Implementation
+// Cart Implementation
+// Create New Cart Component using react hooks, functional component
+// Each Item in this component should be added from Product Component 
+// Now each Product should have general fields, like Name, Description, Rating, Price, Category (New Product Document/ Collection)
+// In Product component each item when we click to display details should also have a button "Add To Item" on click should add to New Cart
+// On Cart Component, Button for save to Checkout should save the cart item to database (New Cart Document/ Collection)

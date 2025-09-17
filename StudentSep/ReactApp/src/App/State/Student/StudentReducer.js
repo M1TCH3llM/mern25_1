@@ -23,7 +23,6 @@ export default function studentReducer(state = initialState, action) {
   return {
     ...state,
     students: state.students.filter(s => s._id !== action.payload),
-    // if the deleted one is currently selected, clear it
     student: state.student && state.student._id === action.payload
       ? { studentName: "", studentCourses: [], courseProgress: 0, _id: undefined }
       : state.student,
@@ -33,7 +32,7 @@ export default function studentReducer(state = initialState, action) {
 case "STUDENT_DELETE_ERROR":
   return { ...state, error: action.payload || "Failed to delete student" };
 
-  
+
     case "STUDENT_SAVE_ERROR":
       return { ...state, error: action.payload || "Failed to save student" };
 

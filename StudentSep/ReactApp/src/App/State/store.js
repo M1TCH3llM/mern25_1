@@ -16,6 +16,8 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import userReducer from "./User/UserReducer";
 import studentReducer from "./Student/StudentReducer";
+import product from "../../../../NodeAPI/datamodel/product";
+import productReducer from "./Product/ProductReducer";
 
 function logger({ getState }) {
   return next => action => {
@@ -29,6 +31,7 @@ function logger({ getState }) {
 let rootReducer = combineReducers({
   userState: userReducer,
   studentState: studentReducer, 
+  productState: productReducer,
 });
 
 let store = configureStore({
