@@ -16,8 +16,8 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import userReducer from "./User/UserReducer";
 import studentReducer from "./Student/StudentReducer";
-import product from "../../../../NodeAPI/datamodel/product";
 import productReducer from "./Product/ProductReducer";
+import cartReducer from "./Cart/CartReducer";
 
 function logger({ getState }) {
   return next => action => {
@@ -28,15 +28,27 @@ function logger({ getState }) {
   }
 }
 
+const cartPersistence = storeAPI => next => action => {
+  const result = next(action);
+  try {
+    const { cartState } = storeAPI.getState();
+    localStorage.setItem("cart_v1", JSON.stringify({ items: cartState.items || [] }));
+  } catch {}
+  return result;
+};
+
 let rootReducer = combineReducers({
   userState: userReducer,
   studentState: studentReducer, 
   productState: productReducer,
+  cartState: cartReducer,
 });
 
 let store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(logger, cartPersistence),
 });
 
 export default store;

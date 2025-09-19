@@ -10,6 +10,7 @@ import NotFoundComponent from "./CommonComponents/NotFoundComponent";
 import UserComponent from "./AppComponents/User/UserComponent";
 import StudentComponent from "./AppComponents/Student/StudentComponent.js";
 import ProductComponent from "./AppComponents/Product/ProductComponent.js";
+import CartComponent from "./AppComponents/Cart/CartComponent.js";
 
 export default class Application extends Component {
     constructor(parameters){
@@ -36,6 +37,7 @@ export default class Application extends Component {
                             <Route path="/about/:id/:name" element={<About />} /> 
                             <Route path="*" element={<NotFoundComponent />} />
                             <Route path="/product" element={<ProductComponent />} />
+                            <Route path="/cart" element={<CartComponent />} />
                             {/* <HomeComponent />  
                             <About /> */}
                         </Routes>              

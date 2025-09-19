@@ -6,9 +6,9 @@ import {
   DeleteProductFromDBUsingFetch,
   UpdateProductInDBUsingFetch
 } from "../../State/Product/ProductAcctions"; 
+import { addItem } from "../../State/Cart/CartActions"; 
 
 const ProductComponent = () => {
-  // refs for form inputs
   const nameRef = useRef(null);
   const priceRef = useRef(null);
   const descRef = useRef(null);
@@ -22,7 +22,7 @@ const ProductComponent = () => {
     dispatch(FetchProductsFromDBUsingFetch());
   }, [dispatch]);
 
-  // ----- Edit helpers -----
+  //  Edit helpers 
   const beginEdit = (p) => {
     setEditingId(p._id);
     if (nameRef.current) nameRef.current.value = p.productName || "";
@@ -80,8 +80,12 @@ const ProductComponent = () => {
   // ----- Delete -----
   const handleDelete = async (id) => {
     await dispatch(DeleteProductFromDBUsingFetch(id));
-    // no refetch needed; reducer already removes it
   };
+
+// ----- Add to Cart -----
+  const handleAddToCart = (product, qty = 1) => {
+  dispatch(addItem(product, qty));
+};
 
   return (
     <>
@@ -149,7 +153,7 @@ const ProductComponent = () => {
               type="submit"
               className="button"
               onClick={handleSave}
-              value={editingId ? "Update Product" : "Save Product"} // ✅ dynamic label
+              value={editingId ? "Update Product" : "Save Product"}
             />
             {editingId && (
               <button type="button" onClick={cancelEdit} style={{ marginLeft: 8 }}>
@@ -164,42 +168,51 @@ const ProductComponent = () => {
         <h2>Products</h2>
         {error && <p style={{ color: "crimson" }}>{error}</p>}
 
-        <table className="table" style={{ maxWidth: 1000 }}>
-          <thead>
+       <table className="table" style={{ maxWidth: 1000 }}>
+        <thead>
             <tr>
-              <th>Name</th>
-              <th style={{ textAlign: "right" }}>Price</th>
-              <th>Description</th>
-              <th style={{ textAlign: "right" }}>Rating</th>
-              <th>Actions</th> {/* single actions column */}
+            <th>Name</th>
+            <th style={{ textAlign: "right" }}>Price</th>
+            <th>Description</th>
+            <th style={{ textAlign: "right" }}>Rating</th>
+            <th style={{ textAlign: "center" }}>Edit</th>
+            <th style={{ textAlign: "center" }}>Delete</th>
+            <th style={{ textAlign: "center" }}>Add</th>
             </tr>
-          </thead>
-          <tbody>
+        </thead>
+
+        <tbody>
             {(products || []).length === 0 ? (
-              <tr>
-                <td colSpan="5"><em>No products yet.</em></td>
-              </tr>
+            <tr>
+                {/* 7 total columns now */}
+                <td colSpan="7"><em>No products yet.</em></td>
+            </tr>
             ) : (
-              products.map((p) => (
+            products.map((p) => (
                 <tr key={p._id}>
-                  <td>{p.productName}</td>
-                  <td style={{ textAlign: "right" }}>
+                <td>{p.productName}</td>
+                <td style={{ textAlign: "right" }}>
                     {typeof p.productPrice === "number"
-                      ? p.productPrice.toFixed(2)
-                      : p.productPrice}
-                  </td>
-                  <td>{p.productDesc}</td>
-                  <td style={{ textAlign: "right" }}>{p.rating}</td>
-                  <td>
+                    ? p.productPrice.toFixed(2)
+                    : p.productPrice}
+                </td>
+                <td>{p.productDesc}</td>
+                <td style={{ textAlign: "right" }}>{p.rating}</td>
+
+                {/* one cell per action */}
+                <td style={{ textAlign: "center" }}>
                     <button onClick={() => beginEdit(p)}>Edit</button>
-                    <button onClick={() => handleDelete(p._id)} style={{ marginLeft: 8 }}>
-                      Delete
-                    </button>
-                  </td>
+                </td>
+                <td style={{ textAlign: "center" }}>
+                    <button onClick={() => handleDelete(p._id)}>Delete</button>
+                </td>
+                <td style={{ textAlign: "center" }}>
+                    <button onClick={() => handleAddToCart(p, 1)}>Add</button>
+                </td>
                 </tr>
-              ))
+            ))
             )}
-          </tbody>
+        </tbody>
         </table>
       </div>
     </>

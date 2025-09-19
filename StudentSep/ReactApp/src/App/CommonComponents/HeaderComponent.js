@@ -13,7 +13,7 @@ let Header = (props)=>{
 
     return(
         <>
-            {userName=="Guest" ? <h3>
+            {userName === "Guest" ? <h3>
             Welcome to Shopping Cart sponsored by Tech Team SIT,
                 Please click on login button to proceed to login.
             </h3> : <h3>
@@ -27,7 +27,10 @@ let Header = (props)=>{
                 <NavLink to="/about"  className="button" activeclassname="true"> About </NavLink>
                 <NavLink to="/student"  className="button" activeclassname="true"> Student </NavLink> 
                 <NavLink to="/product"  className="button" activeclassname="true"> Product </NavLink> 
-
+                <NavLink to="/cart" className="button" activeclassname="true">
+                 Cart
+            
+                </NavLink>
             </div>
 
             <button onClick={navigateWithName} >About With Name</button>
@@ -37,6 +40,10 @@ let Header = (props)=>{
 
 // subscribe to store and get the state as props
 let mapStateToProps = (store)=>{
+
+    const items = (store.cartState && store.cartState.items) || [];
+    const cartCount = items.reduce((sum, i) => sum + (i.qty || 1), 0);
+
     return{
         user : store.userState.user //this is accessing user data from user reducer and will be used in component as props
     }
