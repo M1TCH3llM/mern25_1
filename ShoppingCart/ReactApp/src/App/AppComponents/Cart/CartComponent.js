@@ -1,13 +1,13 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
-import { updateItemQty, removeItem, emptyCart } from "../../State/Cart/CartActions";
+import { updateItemQty, removeItem, emptyCart,saveCartToDB } from "../../State/Cart/CartActions";
 
 // simple currency formatter
 const fmt = (n) =>
   new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(Number(n) || 0);
 
-const CartPage = ({ items, subtotal, updateQty, remove, clear }) => {
+const CartPage = ({ items, subtotal, updateQty, remove, clear, save }) => {
   if (!items.length) {
     return (
       <div style={{ maxWidth: 960, margin: "20px auto", padding: 16 }}>
@@ -96,8 +96,19 @@ const CartPage = ({ items, subtotal, updateQty, remove, clear }) => {
         <div style={{ fontSize: 18 }}>
           Subtotal: <strong>{fmt(subtotal)}</strong>
         </div>
-        <button className="button" style={{ background: "#111", color: "#fff", padding: "10px 16px", borderRadius: 8 }}>
-          Checkout
+        <button
+          className="button"
+          style={{ background: "#111", color: "#fff", padding: "10px 16px", borderRadius: 8 }}
+          onClick={async () => {
+            try {
+              await save({});
+              alert("Cart saved. You can proceed to checkout.");
+            } catch (e) {
+              alert(e.message || "Failed to save cart.");
+            }
+          }}
+        >
+         Save to Checkout
         </button>
       </div>
     </div>
@@ -116,6 +127,7 @@ const mapDispatchToProps = (dispatch) => ({
   updateQty: (id, qty) => dispatch(updateItemQty(id, qty)), // ensure qty is 1 or more
   remove: (id) => dispatch(removeItem(id)), // remove by id
   clear: () => dispatch(emptyCart()), // empty the cart
+  save: (opts) => dispatch(saveCartToDB(opts)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartPage);
