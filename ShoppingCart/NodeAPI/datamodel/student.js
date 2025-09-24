@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const StudentSchema = new mongoose.Schema(
   {
     studentName: { type: String, required: true, trim: true },

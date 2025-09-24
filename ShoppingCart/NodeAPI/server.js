@@ -22,7 +22,7 @@ const userRouter = require('./routes/userRoutes'); // import the user routes
 const userApp = express(); // create a new express application instance for user routes
 
 const cartRouter = require('./routes/cartRoutes'); // import the cart routes
-const cartApp = express(); // create a new express application instance for cart routes
+const cartApp = express.Router(); // create a new express application instance for cart routes
 
 globalThis.__dirname = __dirname; // set the global __dirname variable to the current directory
 
