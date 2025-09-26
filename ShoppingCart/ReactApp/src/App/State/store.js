@@ -1,3 +1,5 @@
+// src/App/State/store.js
+
 //store will be working as a container to hold initial states and logic to update the reducers
 //store objects come from redux library
 //combineReducers - is a hook used to combine multiple reducers as a single entity as redux will allow only one reducers per application
@@ -18,6 +20,7 @@ import userReducer from "./User/UserReducer";
 import studentReducer from "./Student/StudentReducer";
 import productReducer from "./Product/ProductReducer";
 import cartReducer from "./Cart/CartReducer";
+import couponReducer from "./Coupon/CouponReducer";
 
 function logger({ getState }) {
   return next => action => {
@@ -42,6 +45,7 @@ let rootReducer = combineReducers({
   studentState: studentReducer, 
   productState: productReducer,
   cartState: cartReducer,
+  couponReducer: couponReducer,
 });
 
 let store = configureStore({

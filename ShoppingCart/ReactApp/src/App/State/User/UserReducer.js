@@ -1,3 +1,4 @@
+// src/App/State/User/UserReducer.js
 import * as actionTypes  from "../actionTypes";
 
 let initialState = {

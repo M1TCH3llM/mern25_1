@@ -1,3 +1,6 @@
+
+// src/App/State/Cart/CartReducer.js
+
 import * as actionTypes from "../actionTypes";
 
 const readInitial = () => {

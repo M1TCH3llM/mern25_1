@@ -1,11 +1,12 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { updateItemQty, removeItem, emptyCart,saveCartToDB } from "../../State/Cart/CartActions";
 
 // simple currency formatter
 const fmt = (n) =>
   new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(Number(n) || 0);
+
 
 const CartPage = ({ items, subtotal, updateQty, remove, clear, save }) => {
   if (!items.length) {
@@ -17,7 +18,7 @@ const CartPage = ({ items, subtotal, updateQty, remove, clear, save }) => {
       </div>
     );
   }
-
+const navigate = useNavigate();
   return (
     <div style={{ maxWidth: 1100, margin: "20px auto", padding: 16 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -96,7 +97,7 @@ const CartPage = ({ items, subtotal, updateQty, remove, clear, save }) => {
         <div style={{ fontSize: 18 }}>
           Subtotal: <strong>{fmt(subtotal)}</strong>
         </div>
-        <button
+       <button
           className="button"
           style={{ background: "#111", color: "#fff", padding: "10px 16px", borderRadius: 8 }}
           onClick={async () => {
@@ -106,9 +107,15 @@ const CartPage = ({ items, subtotal, updateQty, remove, clear, save }) => {
             } catch (e) {
               alert(e.message || "Failed to save cart.");
             }
-          }}
-        >
-         Save to Checkout
+          }}>
+          Save to Checkout
+        </button>
+
+        <button
+          className="button"
+          style={{ padding: "10px 16px", borderRadius: 8 }}
+          onClick={() => navigate("/checkout")}>
+          Go to Checkout
         </button>
       </div>
     </div>

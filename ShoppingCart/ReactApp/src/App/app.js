@@ -11,6 +11,9 @@ import UserComponent from "./AppComponents/User/UserComponent.js";
 import StudentComponent from "./AppComponents/Student/StudentComponent.js";
 import ProductComponent from "./AppComponents/Product/ProductComponent.js";
 import CartComponent from "./AppComponents/Cart/CartComponent.js";
+import CheckoutPage from "./AppComponents/Checkout/CheckoutPage.js";
+import CouponComponent from "./AppComponents/CouponPage/CouponPage.js";
+
 
 export default class Application extends Component {
     constructor(parameters){
@@ -32,12 +35,14 @@ export default class Application extends Component {
                             <Route path="/" element={<Navigate to="/home" />} />
                             <Route path="/home" element={<HomeComponent />} />
                             <Route path="/login" element={<UserComponent />} />
-                            <Route path="/student" element={<StudentComponent />} />
+                            {/* <Route path="/student" element={<StudentComponent />} /> */}
                             <Route path="/about" element={<About />} />
                             <Route path="/about/:id/:name" element={<About />} /> 
                             <Route path="*" element={<NotFoundComponent />} />
                             <Route path="/product" element={<ProductComponent />} />
                             <Route path="/cart" element={<CartComponent />} />
+                            <Route path="/checkout" element={<CheckoutPage />} />
+                            <Route path="/coupon" element={<CouponComponent />} />
                             {/* <HomeComponent />  
                             <About /> */}
                         </Routes>              
