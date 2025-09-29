@@ -1,21 +1,19 @@
+// src/App/Components/Checkout/CheckoutPage.js
 import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
 
 const fmt = (n) =>
   new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(Number(n) || 0);
 
 export default function CheckoutPage() {
-  // Task #2 UI state
   const [showPaymentPanel, setShowPaymentPanel] = useState(false);
   const [paid, setPaid] = useState(false);
-  const navigate = useNavigate();
 
-
-  //  store shapes 
-  const items = useSelector((s) => s.cartState?.items || []);
-  const user  = useSelector((s) => s.userState?.user) || {};
+  // existing selectors
+  const items  = useSelector((s) => s.cartState?.items || []);
+  const user   = useSelector((s) => s.userState?.user) || {};
+  // coupon from state
+  const coupon = useSelector((s) => s.couponState?.value || null);
 
   // Totals
   const { totalQty, totalAmount } = useMemo(() => {
@@ -31,7 +29,10 @@ export default function CheckoutPage() {
     );
   }, [items]);
 
-  // After Make Payment → hide everything and change header
+  //10% discount if a coupon exists
+  const discount = coupon ? totalAmount * 0.10 : 0;
+  const grandTotal = Math.max(0, totalAmount - discount);
+
   if (paid) {
     return (
       <section style={{ maxWidth: 1100, margin: "20px auto", padding: 16 }}>
@@ -49,7 +50,7 @@ export default function CheckoutPage() {
 
       {!showPaymentPanel && (
         <>
-          {/* User / Delivery Address */}
+          {/* Delivery */}
           <div style={{ border: "1px solid #eee", borderRadius: 8, padding: 12, marginTop: 12 }}>
             <h3>Deliver To</h3>
             <p><strong>{user.userName || "Guest User"}</strong></p>
@@ -58,7 +59,7 @@ export default function CheckoutPage() {
             <small>We will deliver products to the above address.</small>
           </div>
 
-          {/* Cart Table (directly from cartState.items) */}
+          {/* Cart table */}
           <div style={{ marginTop: 16, overflowX: "auto", border: "1px solid #eee", borderRadius: 8 }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
               <thead style={{ background: "#f7f7f7", textAlign: "left" }}>
@@ -79,11 +80,10 @@ export default function CheckoutPage() {
                   const line = qty * price;
                   return (
                     <tr key={item.id ?? idx} style={{ borderTop: "1px solid #eee" }}>
-                      <td style={{ padding: 12, whiteSpace: "nowrap" }}>
+                      <td style={{ padding: 12 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                           {item.image ? (
-                            <img src={item.image} alt="" width={48} height={48}
-                                 style={{ objectFit: "cover", borderRadius: 8 }} />
+                            <img src={item.image} alt="" width={48} height={48} style={{ objectFit: "cover", borderRadius: 8 }} />
                           ) : null}
                           <div>
                             <div style={{ fontWeight: 600 }}>{item.name || `Item ${idx + 1}`}</div>
@@ -108,6 +108,31 @@ export default function CheckoutPage() {
                   <td style={{ padding: 12 }}><strong>{totalQty}</strong></td>
                   <td style={{ padding: 12 }}><strong>{fmt(totalAmount)}</strong></td>
                 </tr>
+
+                {/* NEW: coupon + discount rows */}
+                {coupon && (
+                  <>
+                    <tr>
+                      <td style={{ padding: 12 }} colSpan={3}>
+                        <span>Coupon applied: <strong>{coupon}</strong> (10% off)</span>
+                      </td>
+                      <td style={{ padding: 12, color: "#0a7", fontWeight: 600 }}>
+                        − {fmt(discount)}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: 12 }} colSpan={3}><strong>Grand Total</strong></td>
+                      <td style={{ padding: 12, fontWeight: 700 }}>{fmt(grandTotal)}</td>
+                    </tr>
+                  </>
+                )}
+
+                {!coupon && (
+                  <tr>
+                    <td style={{ padding: 12 }} colSpan={3}><strong>Grand Total</strong></td>
+                    <td style={{ padding: 12, fontWeight: 700 }}>{fmt(grandTotal)}</td>
+                  </tr>
+                )}
               </tfoot>
             </table>
           </div>
@@ -124,7 +149,7 @@ export default function CheckoutPage() {
         </>
       )}
 
-      {/* Payment Panel */}
+      {/* Payment panel */}
       {showPaymentPanel && (
         <div style={{ marginTop: 16 }}>
           <p style={{ marginBottom: 12 }}>
@@ -141,3 +166,5 @@ export default function CheckoutPage() {
     </section>
   );
 }
+
+

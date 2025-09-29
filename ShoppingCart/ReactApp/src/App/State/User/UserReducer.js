@@ -22,6 +22,8 @@ let userReducer = (state = initialState, action) => {
             //...state - spread operator to copy the existing state object
             // product, user, cart => user : action.payload
             return {...state, user: action.payload}
+            case actionTypes.LogoutUser:
+                return {...state, user: {...initialState.user}}
     
         default:
             return state

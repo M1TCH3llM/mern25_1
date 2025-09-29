@@ -16,6 +16,9 @@ export default function CouponComponent() {
       >
         Generate Coupon
       </button>
+    <small style={{ display: "block", marginTop: 8, color: "#666" }}>
+          Your coupon is saved and will be applied automatically at checkout (10% off).
+    </small>
 
       <div style={{ marginTop: 12 }}>
         {coupon ? (

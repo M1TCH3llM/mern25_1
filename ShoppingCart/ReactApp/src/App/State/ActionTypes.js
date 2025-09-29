@@ -3,6 +3,7 @@
 
 export const AddUserToStore = "USER.ADDUSERTOSTORE";//
 export const ADD_PRODUCTS_TOSTORE = "STORE.ADDPRODUCT";
+export const LogoutUser = "USER.LOGOUT";
 
 
 //For Cart //action types for cart operations

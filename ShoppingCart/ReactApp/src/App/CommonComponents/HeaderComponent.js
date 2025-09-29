@@ -1,54 +1,84 @@
-import React from "react"; // this is responsible to parse the JSX code
+import React, { useState } from "react"; // JSX + local state
 import { NavLink, useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { isLoggedIn } from "../helpers/userAuth";              // <-- make sure this file exists
+import { logoutUser } from "../State/User/UserAction";         // <-- uses LogoutUser action
+import LoginModal from "../AppComponents/Auth/LoginModal";             // <-- create at this path or adjust import
 
-let Header = (props)=>{
-    //navigate hook is used to create navigation link on the fly and send the request to given component
-    const navigateHook = useNavigate();
-    const navigateWithName = ()=>{
-       navigateHook("/about/5000/Robin")
-    }
+export default function Header() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    let userName = props.user && props.user.userName ? props.user.userName : "Guest"
+  const user = useSelector((s) => s.userState?.user);
+  const logged = isLoggedIn(user);
+  const userName = user?.userName || "Guest";
 
-    return(
-        <>
-            {userName === "Guest" ? <h3>
-            Welcome to Shopping Cart sponsored by Tech Team SIT,
-                Please click on login button to proceed to login.
-            </h3> : <h3>
-                Welcome to Shopping Cart sponsored by Tech Team SIT, {userName}                
-            </h3> }
-           {/* <a href="home"> Home </a>
-           <a href="about"> About </a> */}
-            <div>
-                <NavLink to="/home"  className="button" activeclassname="true"> Home </NavLink>
-                <NavLink to="/login"  className="button" activeclassname="true"> User </NavLink>               
-                {/* <NavLink to="/about"  className="button" activeclassname="true"> About </NavLink> */}
-                {/* <NavLink to="/student"  className="button" activeclassname="true"> Student </NavLink>  */}
-                <NavLink to="/product"  className="button" activeclassname="true"> Product </NavLink> 
-                <NavLink to="/cart" className="button" activeclassname="true">Cart</NavLink>
-                 <NavLink to="/checkout" className="button" activeclassname="true">Checkout</NavLink>
+  const [loginOpen, setLoginOpen] = useState(false);
 
-            </div>
+  const navigateWithName = () => navigate("/about/5000/Robin");
 
-            <button onClick={navigateWithName} >About With Name</button>
-        </>
-    )
+  return (
+    <>
+      {userName === "Guest" ? (
+        <h3>
+          Welcome to Shopping Cart sponsored by Tech Team SIT, please click on the Login button.
+        </h3>
+      ) : (
+        <h3>
+          Welcome to Shopping Cart sponsored by Tech Team SIT, {userName}
+        </h3>
+      )}
+
+      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        {/* Always visible */}
+        <NavLink to="/home" className="button">Home</NavLink>
+        <NavLink to="/login" className="button">User</NavLink>
+
+        {/* Only when logged in */}
+        {logged && (
+          <>
+            <NavLink to="/product" className="button">Product</NavLink>
+            <NavLink to="/cart" className="button">Cart</NavLink>
+            <NavLink to="/checkout" className="button">Checkout</NavLink>
+            <NavLink to="/coupon" className="button">Coupon</NavLink>
+          </>
+        )}
+
+        {/* Right side: Login/Logout */}
+        <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+          {logged ? (
+            <>
+              <span style={{ alignSelf: "center", color: "#666" }}>
+                Hi, <strong>{userName}</strong>
+              </span>
+              <button
+                className="button"
+                onClick={() => dispatch(logoutUser())}
+                style={{ padding: "6px 10px", borderRadius: 8 }}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              className="button"
+              onClick={() => setLoginOpen(true)}
+              style={{ padding: "6px 10px", borderRadius: 8 }}
+            >
+              Login
+            </button>
+          )}
+        </div>
+      </div>
+
+      <button onClick={navigateWithName} style={{ marginTop: 8 }}>About With Name</button>
+
+      {/* Login modal */}
+      <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
+    </>
+  );
 }
 
-// subscribe to store and get the state as props
-let mapStateToProps = (store)=>{
-
-    const items = (store.cartState && store.cartState.items) || [];
-    const cartCount = items.reduce((sum, i) => sum + (i.qty || 1), 0);
-
-    return{
-        user : store.userState.user //this is accessing user data from user reducer and will be used in component as props
-    }
-}
-
-export default connect(mapStateToProps, null)(Header); //export the component to be used in other files
 
 // Subscriber - this component reads data from store
 // Publisher - this component writes data to store
