@@ -25,7 +25,7 @@ exports.createOrder = async (req, res) => {
     const orderDoc = await RecentOrder.create({
       userId,
       items: items.map((i) => ({
-        productId: i.productId || i.id, // accept either field
+        productId: i.productId || i.id, 
         name: i.name,
         price: asNumber(i.price),
         qty: Math.max(1, asNumber(i.qty || 1)),
@@ -35,8 +35,7 @@ exports.createOrder = async (req, res) => {
       subtotal,
       discount,
       grandTotal,
-      coupon: coupon || null, // store code for reference
-      // cancelBy is filled by schema pre-validate hook
+      coupon: coupon || null, 
     });
 
     res.status(201).json(orderDoc);
@@ -75,13 +74,16 @@ exports.cancelOrder = async (req, res) => {
     const order = await RecentOrder.findById(orderId);
     if (!order) return res.status(404).json({ message: "Order not found" });
 
-    if (order.status !== "PLACED")
-      return res.status(400).json({ message: `Order status is ${order.status}` });
+ if (order.status !== "PLACED") {
+     return res.status(400).json({ message: `Order status is ${order.status}` });
+   }
+   if (nowMs() >= new Date(order.cancelBy).getTime()) {
+     order.status = "DELIVERED";         
+     await order.save();
+     return res.status(400).json({ message: "Cancellation window has expired" });
+   }
 
-    if (nowMs() >= new Date(order.cancelBy).getTime())
-      return res.status(400).json({ message: "Cancellation window has expired" });
-
-    order.status = "CANCELLED";
+   order.status = "CANCELLED";
     await order.save();
 
     res.json({ message: "Order cancelled", order });

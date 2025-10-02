@@ -206,12 +206,18 @@ const ProductComponent = () => {
                 <td style={{ textAlign: "center" }}>
                     <button onClick={() => handleDelete(p._id)}>Delete</button>
                 </td>
-                <td style={{ textAlign: "center" }}>
-                    <button onClick={() => handleAddToCart(p, 1)
-                    }>Add</button>
-                 
-
-                </td>
+                  <td style={{ textAlign: "center" }}>
+                    <button
+                      onClick={async () => {
+                        try {
+                          await handleAddToCart(p, 1);
+                          alert("Item placed in cart");
+                        } catch (e) {
+                          alert(e?.message || "Failed to add item");
+                        }
+                      }}
+                    >Add</button>
+                  </td>
                 </tr>
             ))
             )}

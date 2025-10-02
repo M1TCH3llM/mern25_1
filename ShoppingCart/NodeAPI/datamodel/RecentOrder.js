@@ -52,12 +52,12 @@ RecentOrderSchema.pre("validate", function (next) {
   next();
 });
 
-// Helpful virtual: can this order still be cancelled?
+
 RecentOrderSchema.virtual("isCancellable").get(function () {
   return this.status === "PLACED" && Date.now() < new Date(this.cancelBy).getTime();
 });
 
-// Optional: compound index for user history queries
+
 RecentOrderSchema.index({ userId: 1, createdAt: -1 });
 
 module.exports = mongoose.model("RecentOrder", RecentOrderSchema);
