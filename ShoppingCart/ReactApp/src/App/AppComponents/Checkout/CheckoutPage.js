@@ -1,21 +1,25 @@
 // src/App/Components/Checkout/CheckoutPage.js
+
 import React, { useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { placeOrder, fetchMyOrders } from "../../State/Orders/RecentOrdersActions";
+import { emptyCart } from "../../State/Cart/CartActions";
 
 const fmt = (n) =>
   new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(Number(n) || 0);
 
 export default function CheckoutPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showPaymentPanel, setShowPaymentPanel] = useState(false);
   const [paid, setPaid] = useState(false);
 
-  // existing selectors
-  const items  = useSelector((s) => s.cartState?.items || []);
-  const user   = useSelector((s) => s.userState?.user) || {};
-  // coupon from state
-  const coupon = useSelector((s) => s.couponState?.value || null);
 
-  // Totals
+  const items  = useSelector((s) => s.cartState?.items || []);
+  const user   = useSelector((s) => s.userState?.user || {});
+  const coupon = useSelector((s) => s.couponState?.value ?? null);
+
   const { totalQty, totalAmount } = useMemo(() => {
     return items.reduce(
       (acc, i) => {
@@ -29,8 +33,8 @@ export default function CheckoutPage() {
     );
   }, [items]);
 
-  //10% discount if a coupon exists
-  const discount = coupon ? totalAmount * 0.10 : 0;
+  const hasCoupon = !!coupon;
+  const discount = hasCoupon ? totalAmount * 0.10 : 0;
   const grandTotal = Math.max(0, totalAmount - discount);
 
   if (paid) {
@@ -109,47 +113,35 @@ export default function CheckoutPage() {
                   <td style={{ padding: 12 }}><strong>{fmt(totalAmount)}</strong></td>
                 </tr>
 
-                {/* NEW: coupon + discount rows */}
-                {coupon && (
-                  <>
-                    <tr>
-                      <td style={{ padding: 12 }} colSpan={3}>
-                        <span>Coupon applied: <strong>{coupon}</strong> (10% off)</span>
-                      </td>
-                      <td style={{ padding: 12, color: "#0a7", fontWeight: 600 }}>
-                        − {fmt(discount)}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style={{ padding: 12 }} colSpan={3}><strong>Grand Total</strong></td>
-                      <td style={{ padding: 12, fontWeight: 700 }}>{fmt(grandTotal)}</td>
-                    </tr>
-                  </>
-                )}
-
-                {!coupon && (
+                {hasCoupon && (
                   <tr>
-                    <td style={{ padding: 12 }} colSpan={3}><strong>Grand Total</strong></td>
-                    <td style={{ padding: 12, fontWeight: 700 }}>{fmt(grandTotal)}</td>
+                    <td style={{ padding: 12 }} colSpan={3}>
+                      Coupon applied: <strong>{coupon}</strong> (10% off)
+                    </td>
+                    <td style={{ padding: 12, color: "#0a7", fontWeight: 600 }}>
+                      − {fmt(discount)}
+                    </td>
                   </tr>
                 )}
+
+                <tr>
+                  <td style={{ padding: 12 }} colSpan={3}><strong>Grand Total</strong></td>
+                  <td style={{ padding: 12, fontWeight: 700 }}>{fmt(grandTotal)}</td>
+                </tr>
               </tfoot>
             </table>
           </div>
 
-          {/* Proceed to Payment */}
           <button
             style={{ marginTop: 16, padding: "10px 16px", borderRadius: 8, cursor: "pointer" }}
             onClick={() => setShowPaymentPanel(true)}
             disabled={items.length === 0}
-            title={items.length === 0 ? "Your cart is empty" : "Proceed to payment"}
           >
             Proceed to Payment
           </button>
         </>
       )}
 
-      {/* Payment panel */}
       {showPaymentPanel && (
         <div style={{ marginTop: 16 }}>
           <p style={{ marginBottom: 12 }}>
@@ -157,14 +149,38 @@ export default function CheckoutPage() {
           </p>
           <button
             style={{ padding: "10px 16px", borderRadius: 8, cursor: "pointer" }}
-            onClick={() => setPaid(true)}
-          >
+            onClick={async () => {
+              const userId = user?._id; // adjust if your user id field differs
+              if (!userId) {
+                alert("You must be logged in to place an order.");
+                return;
+              }
+
+              // Shape items for API (server accepts productId or id)
+              const orderItems = items.map(i => ({
+                productId: i.id,
+                name: i.name,
+                price: Number(i.price) || 0,
+                qty: Math.max(1, Number(i.qty) || 1),
+                image: i.image,
+                desc: i.desc,
+              }));
+
+                try {
+                  await dispatch(placeOrder({ userId, items: orderItems, coupon }));
+                  dispatch(emptyCart());
+                  setPaid(true);            // optional: show the thank-you screen briefly
+                  navigate("/orders");      // go to Recent Orders page
+                } catch (e) {
+                  alert(e.message || "Failed to place order");
+                }
+              }}
+            >
             Make Payment
           </button>
+
         </div>
       )}
     </section>
   );
 }
-
-

@@ -13,6 +13,7 @@ import ProductComponent from "./AppComponents/Product/ProductComponent.js";
 import CartComponent from "./AppComponents/Cart/CartComponent.js";
 import CheckoutPage from "./AppComponents/Checkout/CheckoutPage.js";
 import CouponComponent from "./AppComponents/CouponPage/CouponPage.js";
+import RecentOrders from "./AppComponents/Orders/RecentOrders.js";
 
 
 export default class Application extends Component {
@@ -43,6 +44,7 @@ export default class Application extends Component {
                             <Route path="/cart" element={<CartComponent />} />
                             <Route path="/checkout" element={<CheckoutPage />} />
                             <Route path="/coupon" element={<CouponComponent />} />
+                            <Route path="/resentOrders" element={<RecentOrders />} />
                             {/* <HomeComponent />  
                             <About /> */}
                         </Routes>              

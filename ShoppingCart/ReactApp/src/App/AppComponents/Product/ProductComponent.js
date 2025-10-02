@@ -207,7 +207,10 @@ const ProductComponent = () => {
                     <button onClick={() => handleDelete(p._id)}>Delete</button>
                 </td>
                 <td style={{ textAlign: "center" }}>
-                    <button onClick={() => handleAddToCart(p, 1)}>Add</button>
+                    <button onClick={() => handleAddToCart(p, 1)
+                    }>Add</button>
+                 
+
                 </td>
                 </tr>
             ))

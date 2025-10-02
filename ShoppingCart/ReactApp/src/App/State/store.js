@@ -21,6 +21,7 @@ import studentReducer from "./Student/StudentReducer";
 import productReducer from "./Product/ProductReducer";
 import cartReducer from "./Cart/CartReducer";
 import couponReducer from "./Coupon/CouponReducer";
+import recentOrdersReducer from "./Orders/RecentOrdersReducer";
 
 function logger({ getState }) {
   return next => action => {
@@ -45,6 +46,7 @@ let rootReducer = combineReducers({
   studentState: studentReducer, 
   productState: productReducer,
   cartState: cartReducer,
+  ordersState: recentOrdersReducer,
   couponReducer: couponReducer,
 });
 

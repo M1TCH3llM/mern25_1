@@ -13,3 +13,8 @@ export const UPDATE_ITEM = "CART.UPDATE_ITEM";
 export const EMPTY_CART = "CART.EMPTY_CART";
 
 export const ADD_COUPON = "COUPON.ADD_COUPON";
+
+export const ORDERS_SET = "ORDERS.SET";
+export const ORDERS_LOADING = "ORDERS.LOADING";
+export const ORDERS_ERROR = "ORDERS.ERROR";
+export const ORDER_UPDATED = "ORDERS.ORDER_UPDATED"

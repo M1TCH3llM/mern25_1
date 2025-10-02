@@ -41,6 +41,8 @@ export default function Header() {
             <NavLink to="/cart" className="button">Cart</NavLink>
             <NavLink to="/checkout" className="button">Checkout</NavLink>
             <NavLink to="/coupon" className="button">Coupon</NavLink>
+            <NavLink to="/resentOrders" className="button">Orders</NavLink>
+
           </>
         )}
 
