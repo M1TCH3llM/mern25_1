@@ -45,7 +45,8 @@ const RecentOrderSchema = new Schema(
 // Compute cancelBy 
 RecentOrderSchema.pre("validate", function (next) {
   if (!this.cancelBy) {
-    const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000; // 2 days in milliseconds
+  //  const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000; // 2 days in milliseconds
+    const TWO_DAYS_MS = 10 * 1000; // 2 days in milliseconds
     const base = this.createdAt ? this.createdAt.getTime() : Date.now();
     this.cancelBy = new Date(base + TWO_DAYS_MS);
   }

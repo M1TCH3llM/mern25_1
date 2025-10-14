@@ -1,32 +1,62 @@
-//all user api's will come here starting with sign-in and sign-up
-//we import userData model and create object to connect with user collection
+// routes/userRoutes.js
 
-let expressObj = require("express")
+const express = require("express");
+const userRouter = express.Router({}); // options - strict, caseSensitive, etc.
 
-let userRouter = expressObj.Router({}) //options - strict, readonly etc
-let userDataModel = require("../datamodel/userDataModel");
+const { generateToken } = require("../services/tokenGen");
+const { authenticate } = require("../middlewares/authMiddleware");
+const User = require("../datamodel/userDataModel");
 
-userRouter.post("/api/signinup", (req, res)=>{
-    let userData = req.body; //this will be the user object inserted by end user at fron end
-    console.log(userData)
+// Helper to remove sensitive fields before sending to client
+const toSafeUser = (u) => {
+  if (!u) return u;
+  const obj = u.toObject ? u.toObject() : u;
+  delete obj.password;
+  return obj;
+};
 
-    userDataModel.findOne({userName:req.body.userName})
-        .then((existingUser)=>{
-            if(existingUser)//user exists so send the user details - sign in            
-                res.send(existingUser)            
-            else
-                {   //user does not exist so - sign up
-                    let userDataObj = new userDataModel(userData)//this creates a valid mongo db object with all sql operations
-                    
-                    userDataObj.save().then((newUser)=>{//will get _id once document is created
-                        console.log("successful signup ", newUser);
-                        res.send(newUser) //{userName : "value"....}
-                    }).catch((err1)=>{
-                        console.log("err signup", err1);
-                        res.send("error while sign up")
-                    })
-                }
-    })
-})
+// SIGN-IN/UP
+userRouter.post("/api/signinup", async (req, res) => {
+  try {
+    const { userName } = req.body;
+    if (!userName) {
+      return res.status(400).json({ message: "userName is required" });
+    }
+
+    // Find existing user
+    let user = await User.findOne({ userName }).select("-password");
+
+    if (user) {
+      // Sign-in
+      generateToken(res, user._id);          // <-- sets jwt cookie
+      return res.json(toSafeUser(user));     // send user sans password
+    }
+
+    // Sign-up
+    const newUser = new User(req.body);
+    const saved = await newUser.save();
+    generateToken(res, saved._id);           // <-- sets jwt cookie
+    return res.json(toSafeUser(saved));
+
+  } catch (err) {
+    console.error("signinup error:", err);
+    return res.status(500).json({ message: "error while sign in/up" });
+  }
+});
+
+userRouter.get("/auth/me", authenticate, (req, res) => {
+  // authenticate adds req.user (already without password in our middleware)
+  return res.json({ user: req.user });
+});
+
+// LOGOUT 
+userRouter.post("/api/logout", (req, res) => {
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+  return res.json({ message: "Logged out" });
+});
 
 module.exports = userRouter;

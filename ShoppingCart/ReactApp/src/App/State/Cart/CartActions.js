@@ -61,8 +61,7 @@ export const saveCartToDB = (opts = {}) => {
     }
 
     const savedCart = await res.json();
-    // Optionally clear after save:
-    // dispatch(emptyCart());
+   
     return savedCart;
   };
 };

@@ -18,6 +18,99 @@ html {
 body {
   margin: 0; }
 
+/* ===== Modalized Notifications ===== */
+
+.notif-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(166, 166, 166, 0.865);
+  backdrop-filter: saturate(120%) blur(1px);
+  z-index: 2000; /* above header */
+  display: flex;
+  align-items: flex-start; /* slide from top */
+  justify-content: center;
+  padding: 48px 16px; /* top gutter so it feels like a sheet */
+}
+
+.notif-modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 70vh;
+  overflow: auto;
+  background: #ffffffd8;    /* match review */
+  color: #000000;
+  border: 1px solid #333;
+  border-radius: 12px;
+  box-shadow: 0 24px 48px rgba(0,0,0,.5);
+  padding:0  8px 2px 2px;
+}
+
+.notif-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #2b2b2b;
+  position: sticky;
+  top: 0;
+  background: inherit;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  z-index: 1;
+}
+
+.notif-empty {
+  padding: 16px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.notif-section {
+  padding: 6px 0;
+}
+
+.notif-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 8px 0;
+}
+
+.notif-label {
+  font-size: 14px;
+}
+
+/* Reuse prior button styles in panel
+.notif-modal button {
+  background: transparent;
+  border: 1px solid #333;
+  color: inherit;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+} */
+
+/* Keep your previous .notif-item styling */
+.notif-item {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.notif-item.unread {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+
+
+
+
 /* HTML5 display definitions
    ========================================================================== */
 /**
@@ -3154,3 +3247,4 @@ select.stack {
   margin-right: -6px;
   right: 100%;
   top: 7px; }
+

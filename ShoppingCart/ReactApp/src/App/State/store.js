@@ -22,6 +22,9 @@ import productReducer from "./Product/ProductReducer";
 import cartReducer from "./Cart/CartReducer";
 import couponReducer from "./Coupon/CouponReducer";
 import recentOrdersReducer from "./Orders/RecentOrdersReducer";
+import notificationReducer from "./Notification/NotificationReducer.js";
+
+
 
 function logger({ getState }) {
   return next => action => {
@@ -48,13 +51,14 @@ let rootReducer = combineReducers({
   cartState: cartReducer,
   ordersState: recentOrdersReducer,
   couponReducer: couponReducer,
+  notifications: notificationReducer,
 });
 
-let store = configureStore({
+const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
-    middleware: (getDefaultMiddleware) =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(logger, cartPersistence),
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 export default store;

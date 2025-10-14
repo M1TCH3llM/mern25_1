@@ -1,4 +1,5 @@
 import * as actionTypes from "../actionTypes";
+import { notifyOrderCancelled} from "../Notification/NotificationActions"
 // helpers
 const json = (r) => r.json();
 const api = (path, init) => fetch(`http://localhost:9000${path}`, init);
@@ -54,8 +55,8 @@ export const cancelOrder = ({ orderId, userId }) => async (dispatch) => {
     const res = await api(`/orders/${orderId}/cancel`, { method: "POST" });
     const body = await json(res).catch(() => ({}));
     if (!res.ok) throw new Error(body.message || `HTTP ${res.status}`);
-    // Update that one order in state without re-fetching all (or call fetchMyOrders again if you prefer)
     dispatch(orderUpdated(body.order));
+    dispatch(notifyOrderCancelled(body.orderId));
     return body.order;
   } catch (e) {
     dispatch(setError(e.message || "Failed to cancel order"));

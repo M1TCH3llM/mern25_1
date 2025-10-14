@@ -1,41 +1,55 @@
 let express = require('express'); // express server framework starting point
-let cors = require('cors'); // to allow cross origin requests
+let cors = require('cors');       // to allow cross origin requests
+const cookieParser = require('cookie-parser'); // <-- add this
 const mongoose = require('mongoose'); //  add mongoose
+require('dotenv').config();
 
 const app = express(); // initialize express application
-const defaultRouter = require('./routes/defaultRoutes'); // import the default routes
 
-app.use(cors()); // use cors to allow cross origin requests
-// child applications can also be created and used as mounted apps
-// json middle-ware for setting request content type to json in body
-app.use(express.json({ limit: '2mb', extended: false })); // note: `extended` is ignored by express.json, it's fine
+// --- Core middleware  ---
+app.use(express.json({ limit: '2mb' }));  // parse JSON once
+app.use(cookieParser());                  // parse cookies BEFORE using them
 
-const defaultApp = express(); // create a new express application instance
+// CORS: allow your React app to send/receive cookies
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN || 'http://localhost:9090',
+    credentials: true,
+  })
+);
 
-const studentRouter = require('./routes/studentRoutes'); // import the student routes
-const studentApp = express(); // create a new express application instance for student routes
+// --- Routers & sub-apps ---
+const defaultRouter = require('./routes/defaultRoutes');
+
+const defaultApp = express();
+
+const studentRouter = require('./routes/studentRoutes');
+const studentApp = express();
 
 const productRouter = require('./routes/productRoutes');
 const productApp = express();
 
-const userRouter = require('./routes/userRoutes'); // import the user routes
-const userApp = express(); // create a new express application instance for user routes
+const userRouter = require('./routes/userRoutes');
+const userApp = express();
 
-const cartRouter = require('./routes/cartRoutes'); // import the cart routes
-const cartApp = express.Router(); // create a new express application instance for cart routes
+const cartRouter = require('./routes/cartRoutes');
+// You can use a Router() here (that was fine), but an express() sub-app works too:
+const cartApp = express();
 
-globalThis.__dirname = __dirname; // set the global __dirname variable to the current directory
+// Global __dirname (if you really need it)
+globalThis.__dirname = __dirname;
 
-// MONGODB CONNECTION
+// --- MongoDB connection ---
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/nodeapi';
+
 async function connectMongoOnce() {
-    const state = mongoose.connection.readyState;
+  const state = mongoose.connection.readyState; // 0=disconnected,1=connected,2=connecting,3=disconnecting
   if (state === 1) {
     console.log('MongoDB already connected');
     return;
   }
   if (state === 2) {
-    console.log(' MongoDB connection already in progress');
+    console.log('MongoDB connection already in progress');
     return;
   }
 
@@ -48,63 +62,65 @@ connectMongoOnce().catch(err => {
   process.exit(1);
 });
 
+// --- Static files ---
+app.use('/static', express.static('public')); // localhost:9000/static/<file>
 
-// we can use static middleware to serve static files
-// setting up the middleware static to handle all the static files we need to serve to client
-// serve static files like images css using static middleware
-app.use('/static', express.static('public')); // localhost:9000/static/loadUserInfo.js
+// --- Mount sub-apps / routers ---
+app.use('/student', studentApp);
+studentApp.use('/', studentRouter);
 
-// application mounting for student routes
-app.use('/student', studentApp); // base path: /student
-studentApp.use('/', studentRouter); // routes live at: GET /student/, POST /student/, etc.
-
-// application mounting for user routes
-app.use('/user', userApp); // base path: /user (e.g., /user/api/signinup per your comment)
+app.use('/user', userApp);
 userApp.use('/', userRouter);
 
-//Product
-app.use("/product", productApp);
+app.use('/product', productApp);
 productApp.use('/', productRouter);
 
-//Order page
-app.use("/orders", require("./routes/resentOrderRoutes"));
+app.use('/orders', require('./routes/resentOrderRoutes'));
 
-app.use("/cart",
-  (req, res, next) => { console.log("[cart-subapp]", req.method, req.originalUrl); next(); },
-  cartApp);
-cartApp.get("/ping", (req, res) => res.send("cart ok"));
+app.use('/cart',
+  (req, res, next) => { console.log('[cart-subapp]', req.method, req.originalUrl); next(); },
+  cartApp
+);
+cartApp.get('/ping', (req, res) => res.send('cart ok'));
 cartApp.use('/', cartRouter);
 
-
-
-// application mounting for default routes
 app.use('/', defaultApp);
 defaultApp.use('/', defaultRouter);
 
-app.listen(9000);
-console.log('Server is running on http://localhost:9000');
+// --- Start server ---
+const PORT = process.env.PORT || 9000;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 
-// Coupon Page 
-// Create a component with Name - CouponComponent (Functional Component and Use Hooks)
-// On the page add a Button - GenerateCoupon
-// Upon Click Generate a random coupon of - 6 digits (basically a numeric random value)
-// Dispatch this generated coupon using useDispatch
-// Create a Coupon Reducer to have Coupon Value, Use Reducer to update the coupon value (useSelector coupon)
-// Create action to pass coupon to reducer, with type and payload
+// 10-Oct-2025 - Notifications
+// Show notification on top of header (Right Corner)
+// Design Should show a circular or any small icon, to show number of notifications
+// Upon click it should expand in rectangular box and show all the notification messages 
+// All notification messages should be clickable
+// Upon click of any of them it should reduce the count in notification icon
+// It should have two types of notifications - static and dynamic
+// Static Notifications To Assist User
+// 1. To Add Products from Product Screen
+// 2. To Add Items from Cart Page
+// 3. To review cart from Checkout Page
+// 4. To Make Payment from Payment Page
+// 5. To Assist Them for cancel/reorder
+// Dynamic Notifications To Assist User
+// 1. To Check the number of items added in the Cart
+// 2. If user cancels an order it should it should add one notification that an order has been cancelled and add it to notification row
+
+// 7th-Oct-2025 - Review Page
+// This should get its reviews from recent orders page
+// User should be allowed to give ratings and his comments to each products as well as the order
+// Upon successful submission each product should have a link to show its review -
+// When user expands product detail we should also see the button to which will take us to review or review list
+// on recent order page we can show a popup to submit rating or a new page its up to you //can use -> react bootstrap
+// user should only be able to give rating once cancel button is gone
 
 
-// Part 2 : 
-// Hide all the links except : Home, User and About for a user not logged-in
-// In Product Component show Save to product section only to a user with name "admin" so that not all users 
-// can insert the products to database
-// what is a JWT token?
-
-
-// Test
-// Upon MakePayment Click
-// Save the cart to RecentOrders collection (should have userid, order, dateTime)
-// Make API to Save and Fetch from RecentOrders
-// Make a component RecentOrders to Show all previous Orders of current user
-// Add a button to Cancel (like) we have remove in CartComponent and then save again,
-// order can be cancelled within 2 days after that it should be marked delivered
+// 7th-Oct-2025 - Reorder Page 
+// Reorder
+// User to reorder from recent orders or from cancelled orders
+// A Simple process just add the order to your cart and replace or merge whatever is present in cart

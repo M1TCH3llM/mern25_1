@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { isLoggedIn } from "../helpers/userAuth";              // <-- make sure this file exists
 import { logoutUser } from "../State/User/UserAction";         // <-- uses LogoutUser action
 import LoginModal from "../AppComponents/Auth/LoginModal";             // <-- create at this path or adjust import
+import NotificationBell from "../AppComponents/Notification/NotificationComponent"
+import NotificationC from "../AppComponents/Notification/NotificationConnected"
+import CartIcon from "../CommonComponents/CartIcon";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -25,7 +28,7 @@ export default function Header() {
         </h3>
       ) : (
         <h3>
-          Welcome to Shopping Cart sponsored by Tech Team SIT, {userName}
+          Welcome to Shopping Cart sponsored by Tech Team SIT, Welcome {userName}!
         </h3>
       )}
 
@@ -38,16 +41,19 @@ export default function Header() {
         {logged && (
           <>
             <NavLink to="/product" className="button">Product</NavLink>
-            <NavLink to="/cart" className="button">Cart</NavLink>
+            <CartIcon />
+            {/* <NavLink to="/cart" className="button">Cart</NavLink> */}
             <NavLink to="/checkout" className="button">Checkout</NavLink>
             <NavLink to="/coupon" className="button">Coupon</NavLink>
             <NavLink to="/resentOrders" className="button">Orders</NavLink>
+            <NavLink to="/Review" className="button">Review</NavLink>
 
           </>
         )}
 
         {/* Right side: Login/Logout */}
         <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+            <NotificationC />
           {logged ? (
             <>
               <span style={{ alignSelf: "center", color: "#666" }}>
