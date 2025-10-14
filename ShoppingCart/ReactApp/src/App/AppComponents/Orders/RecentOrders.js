@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyOrders, cancelOrder } from "../../State/Orders/RecentOrdersActions";
-import { saveReviews } from "../../State/Review/ReviewsActions";
+import { postReview } from "../../State/Review/ReviewsActions";
 import ReviewModal from "../Review/ReviewModal";
 
 const fmt = (n) =>
@@ -56,10 +56,13 @@ export default function RecentOrders() {
     setReviewItems([]);
   };
 
+
   const handleSaveReviews = (payload) => {
-    dispatch(saveReviews(payload));
+    dispatch(postReview(payload));
     closeReview();
-  };
+ };
+
+ 
 
   return (
     <section style={{ maxWidth: 1000, margin: "20px auto", padding: 16 }}>
@@ -121,6 +124,7 @@ return (
 
                 {/* Cancel */}
                 <button
+                  type="button"
                   disabled={!cancellable}
                   onClick={() => tryCancel(o)}
                   className="button"
@@ -164,6 +168,7 @@ return (
         );
       })}
 
+     
       {/* Single modal instance outside the map */}
       <ReviewModal
         open={reviewOpen}
@@ -171,7 +176,7 @@ return (
         orderId={reviewOrderId}
         items={reviewItems}
         canReview={reviewCanReview}
-        onSubmit={handleSaveReviews}
+        onSubmit={handleSaveReviews}        
         anchorRect={reviewAnchor}
       />
     </section>

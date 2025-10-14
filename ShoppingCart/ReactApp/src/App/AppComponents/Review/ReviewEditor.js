@@ -158,23 +158,49 @@ export default function ReviewEditor({
   );
 }
 
-/* Stars (uses .review-stars container styles from app.css) */
-function Stars({ value = 0, onChange, disabled }) {
-  const v = clamp(value, 0, 5);
+/* Stars (red when selected, stays highlighted; hover preview supported) */
+function Stars({ value = 0, onChange, disabled = false }) {
+  const [hover, setHover] = useState(null);
+  const active = hover ?? value;
+
+  const baseBtn = {
+    appearance: "none",
+    border: "none",
+    background: "transparent",
+    padding: 0,
+    margin: 0,
+    cursor: disabled ? "default" : "pointer",
+    fontSize: 24,
+    lineHeight: 1,
+    transition: "transform 120ms ease, color 120ms ease",
+  };
+
+  const starStyle = (n) => ({
+    ...baseBtn,
+    color: n <= active ? "#e11d48" /* red-600 */ : "#cbd5e1" /* slate-300 */,
+    transform: n <= active && hover != null ? "scale(1.05)" : "none",
+  });
+
   return (
-    <>
+    <div role="group" aria-label="Star rating" style={{ display: "inline-flex", gap: 4 }}>
       {[1, 2, 3, 4, 5].map((n) => (
         <button
-          type="button"
           key={n}
+          type="button"
+          style={starStyle(n)}
+          onMouseEnter={() => !disabled && setHover(n)}
+          onMouseLeave={() => !disabled && setHover(null)}
+          onFocus={() => !disabled && setHover(n)}
+          onBlur={() => !disabled && setHover(null)}
           onClick={() => !disabled && onChange && onChange(n)}
           aria-label={`${n} star${n === 1 ? "" : "s"}`}
+          aria-pressed={value >= n}
           disabled={disabled}
         >
           ★
         </button>
       ))}
-    </>
+    </div>
   );
 }
 

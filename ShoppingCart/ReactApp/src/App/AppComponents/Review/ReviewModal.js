@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import ReviewEditor from "./ReviewEditor";
 
 export default function ReviewModal({
@@ -8,11 +8,7 @@ export default function ReviewModal({
   items = [],
   canReview = true,
   onSubmit,
-  anchorRect,
 }) {
-  const panelRef = useRef(null);
-  const [pos, setPos] = useState({ top: null, left: null, placement: "center" });
-
   const productItems = useMemo(() => {
     if (!Array.isArray(items)) return [];
     return items.map((it, idx) => ({
@@ -24,7 +20,6 @@ export default function ReviewModal({
     }));
   }, [items]);
 
-  // ESC to close
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && onClose && onClose();
@@ -32,68 +27,72 @@ export default function ReviewModal({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  // Position relative to anchor (if provided)
-  useEffect(() => {
-    if (!open) return;
-
-    const place = () => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-
-      if (!anchorRect) {
-        setPos({ top: null, left: null, placement: "center" });
-        return;
-      }
-
-      const width = Math.min(560, vw - 24);
-      const height = Math.min(0.7 * vh, vh - 24);
-
-      const topBelow = Math.min(anchorRect.bottom + 8, vh - height - 12);
-      const leftAlign = Math.min(Math.max(12, anchorRect.left), vw - width - 12);
-
-      setPos({ top: topBelow, left: leftAlign, placement: "anchored" });
-    };
-
-    place();
-    const onResize = () => place();
-    window.addEventListener("resize", onResize);
-    window.addEventListener("scroll", onResize, true);
-    return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("scroll", onResize, true);
-    };
-  }, [open, anchorRect]);
-
   if (!open) return null;
 
   return (
     <div className="notif-backdrop" onClick={() => onClose && onClose()}>
       <div
-        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label="Review editor"
         className="notif-modal"
         onClick={(e) => e.stopPropagation()}
-        style={
-          pos.placement === "center"
-            ? { position: "relative" } // centered by .notif-backdrop flex
-            : {
-                position: "fixed",
-                top: pos.top ?? 80,
-                left: pos.left ?? 24,
-                transform: "none",
-              }
-        }
+        style={{
+          position: "relative",
+          maxWidth: 560,
+          width: "100%",
+          borderRadius: 12,
+          // key bits for scrolling:
+          maxHeight: "80vh",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
       >
-        <div className="notif-modal-header">
-          <strong>Review Order #{String(orderId)}</strong>
-          <div style={{ display: "flex", gap: 8 }}>
-            <button type="button" onClick={onClose}>Close</button>
-          </div>
+        {/* Header (stays visible) */}
+        <div
+          className="notif-modal-header"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "12px 14px",
+            borderBottom: "1px solid #eee",
+            // optional sticky header for long forms
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
+            background: "inherit",
+          }}
+        >
+          <strong style={{ fontSize: 16 }}>
+            Review Order #{String(orderId)}
+          </strong>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            style={{
+              border: "1px solid #ddd",
+              background: "#f8f8f8",
+              borderRadius: 8,
+              padding: "6px 10px",
+              cursor: "pointer",
+            }}
+          >
+            Close
+          </button>
         </div>
 
-        <div style={{ padding: 8 }}>
+        {/* Scrollable content */}
+        <div
+          style={{
+            padding: 12,
+            overflowY: "auto",
+            flex: 1,
+            minHeight: 0, 
+          }}
+        >
           <ReviewEditor
             orderId={orderId}
             items={productItems}
